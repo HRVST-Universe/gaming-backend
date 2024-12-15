@@ -1,0 +1,49 @@
+
+2024/12/15 18:09:55 [32m/home/runner/Digital-Ocean/gaming-backend/rewarding-harvest-backend/main.go:60 [33mSLOW SQL >= 200ms
+[0m[31;1m[213.878ms] [33m[rows:1][35m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'users' AND table_type = 'BASE TABLE'[0m
+
+2024/12/15 18:09:55 [32m/home/runner/Digital-Ocean/gaming-backend/rewarding-harvest-backend/main.go:60
+[0m[33m[140.884ms] [34;1m[rows:1][0m SELECT CURRENT_DATABASE()
+
+2024/12/15 18:09:55 [32m/home/runner/Digital-Ocean/gaming-backend/rewarding-harvest-backend/main.go:60
+[0m[33m[159.219ms] [34;1m[rows:-][0m SELECT c.column_name, c.is_nullable = 'YES', c.udt_name, c.character_maximum_length, c.numeric_precision, c.numeric_precision_radix, c.numeric_scale, c.datetime_precision, 8 * typlen, c.column_default, pd.description, c.identity_increment FROM information_schema.columns AS c JOIN pg_type AS pgt ON c.udt_name = pgt.typname LEFT JOIN pg_catalog.pg_description as pd ON pd.objsubid = c.ordinal_position AND pd.objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = c.table_name AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = c.table_schema)) where table_catalog = 'seekers-rh' AND table_schema = CURRENT_SCHEMA() AND table_name = 'users'
+
+2024/12/15 18:09:55 [32m/home/runner/Digital-Ocean/gaming-backend/rewarding-harvest-backend/main.go:60
+[0m[33m[70.884ms] [34;1m[rows:-][0m SELECT * FROM "users" LIMIT 5
+
+2024/12/15 18:09:55 [32m/home/runner/Digital-Ocean/gaming-backend/rewarding-harvest-backend/main.go:60
+[0m[33m[154.365ms] [34;1m[rows:-][0m SELECT constraint_name FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'seekers-rh' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'users' AND constraint_type = 'UNIQUE'
+
+2024/12/15 18:09:55 [32m/home/runner/Digital-Ocean/gaming-backend/rewarding-harvest-backend/main.go:60
+[0m[33m[152.716ms] [34;1m[rows:-][0m SELECT c.column_name, constraint_name, constraint_type FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'seekers-rh' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'users'
+
+2024/12/15 18:09:56 [32m/home/runner/Digital-Ocean/gaming-backend/rewarding-harvest-backend/main.go:60
+[0m[33m[140.823ms] [34;1m[rows:-][0m SELECT a.attname as column_name, format_type(a.atttypid, a.atttypmod) AS data_type
+		FROM pg_attribute a JOIN pg_class b ON a.attrelid = b.oid AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA())
+		WHERE a.attnum > 0 -- hide internal columns
+		AND NOT a.attisdropped -- hide deleted columns
+		AND b.relname = 'users'
+
+2024/12/15 18:09:56 [32m/home/runner/Digital-Ocean/gaming-backend/rewarding-harvest-backend/main.go:60
+[0m[33m[141.080ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'users' AND column_name = 'id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'users' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2024/12/15 18:09:56 [32m
+[0m[33m[75.546ms] [34;1m[rows:0][0m ALTER TABLE "users" ADD CONSTRAINT "uni_users_game_shift_id" UNIQUE ("game_shift_id")
+
+2024/12/15 18:09:56 [32m/home/runner/Digital-Ocean/gaming-backend/rewarding-harvest-backend/main.go:60
+[0m[33m[70.674ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'users' AND column_name = 'game_shift_id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'users' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2024/12/15 18:09:56 [32m/home/runner/Digital-Ocean/gaming-backend/rewarding-harvest-backend/main.go:60
+[0m[33m[70.641ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'users' AND column_name = 'username') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'users' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2024/12/15 18:09:56 [32m/home/runner/Digital-Ocean/gaming-backend/rewarding-harvest-backend/main.go:60
+[0m[33m[70.564ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'users' AND column_name = 'email') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'users' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2024/12/15 18:09:56 [32m/home/runner/Digital-Ocean/gaming-backend/rewarding-harvest-backend/main.go:60
+[0m[33m[71.253ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'users' AND column_name = 'wallet_type') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'users' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2024/12/15 18:09:56 [32m/home/runner/Digital-Ocean/gaming-backend/rewarding-harvest-backend/main.go:60
+[0m[33m[70.479ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'users' AND column_name = 'wallet_address') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'users' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2024/12/15 18:09:56 [32m/home/runner/Digital-Ocean/gaming-backend/rewarding-harvest-backend/main.go:60
+[0m[33m[71.484ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'users' AND column_name = 'created_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'users' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))

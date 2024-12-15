@@ -1,2 +1,0 @@
-Database connection established with SSL
-[GIN] 2024/12/15 - 17:55:34 | 404 |         370ns |   172.31.196.23 | GET      "/"

@@ -1,0 +1,5 @@
+
+2024/12/15 17:35:54 [35m/home/runner/Digital-Ocean/gaming-backend/rewarding-harvest-backend/config/config.go:51
+[0m[31m[error] [0mfailed to initialize database, got error failed to connect to `user=password=AVNS_-vltjGtkDGYfoog8gqR database=sslmode=`:
+	167.172.206.254:25061 (rh-2024-do-user-18213260-0.l.db.ondigitalocean.com): server error: FATAL: password authentication failed (SQLSTATE 08P01)
+	167.172.206.254:25061 (rh-2024-do-user-18213260-0.l.db.ondigitalocean.com): server error: FATAL: SSL required (SQLSTATE 08P01)

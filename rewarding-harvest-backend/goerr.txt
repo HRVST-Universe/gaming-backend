@@ -1,0 +1,3 @@
+
+2024/12/15 06:50:47 [35m/home/runner/Digital-Ocean/gaming-backend/rewarding-harvest-backend/config/config.go:29
+[0m[31m[error] [0mfailed to initialize database, got error failed to connect to `user=doadmin database=rh-pool1`: 167.172.206.254:25061 (rh-2024-do-user-18213260-0.l.db.ondigitalocean.com): server error: FATAL: SSL required (SQLSTATE 08P01)

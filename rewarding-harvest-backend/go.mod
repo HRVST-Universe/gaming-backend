@@ -1,6 +1,6 @@
 module rewarding-harvest-backend
 
-go 1.22
+go 1.22.0
 
 toolchain go1.22.10
 
@@ -10,7 +10,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.2.1
 
 	// Database and SSL Libraries
-	github.com/jackc/pgx/v5 v5.7.1
+	github.com/jackc/pgx/v5 v5.7.1 // indirect
 	gorm.io/driver/postgres v1.5.11
 	gorm.io/gorm v1.25.12
 )
@@ -71,4 +71,6 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-require github.com/joho/godotenv v1.5.1 // indirect
+require github.com/joho/godotenv v1.5.1
+
+require github.com/google/go-cmp v0.6.0 // indirect

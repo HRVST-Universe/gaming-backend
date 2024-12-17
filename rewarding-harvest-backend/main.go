@@ -3,62 +3,27 @@ package main
 import (
   "log"
   "os"
-  "time"
 
   "github.com/gin-gonic/gin"
   "github.com/joho/godotenv"
-
-  // Internal packages
-  "github.com/HRVST-Universe/gaming-backend/rewarding-harvest-backend/config"
-  "github.com/HRVST-Universe/gaming-backend/rewarding-harvest-backend/routes"
-  "github.com/HRVST-Universe/gaming-backend/rewarding-harvest-backend/schemas"
-  "github.com/HRVST-Universe/gaming-backend/rewarding-harvest-backend/utils"
+  "rewarding-harvest-backend/config"
+  "rewarding-harvest-backend/routes"
 )
 
 func main() {
   // Load environment variables
   if err := godotenv.Load(".env"); err != nil {
-    log.Println("⚠️  Warning: .env file not found. Using system environment variables.")
+    log.Println("⚠️  Warning: .env file not found.")
   }
 
-  // Connect to the database
+  // Initialize the database
   config.ConnectDatabase()
 
-  // Fetch PostgreSQL schema and generate models
-  schema := schemas.FetchSchema(config.DB)
-  utils.GenerateModels(schema)
-  log.Println("✅ Models generated successfully")
+  // Initialize the router
+  router := gin.Default()
 
-  // Initialize Gin router
-  r := gin.Default()
-
-  // Health check route
-  r.GET("/api/health", func(c *gin.Context) {
-    c.JSON(200, gin.H{
-      "status":  "Server is running",
-      "message": "Welcome to Rewarding Harvest API",
-    })
-  })
-
-  // API Discovery Route: List all available routes
-  r.GET("/api/routes", func(c *gin.Context) {
-    routesInfo := []gin.RouteInfo{}
-    for _, route := range r.Routes() {
-      routesInfo = append(routesInfo, route)
-    }
-    c.JSON(200, gin.H{
-      "status": "success",
-      "routes": routesInfo,
-    })
-  })
-
-  // Auto-generate CRUD routes
-  var models []string
-  for tableName := range utils.GroupSchemaByTable(schema) {
-    models = append(models, tableName)
-  }
-  routes.AutoGenerateRoutes(r, config.DB, models)
-  log.Println("✅ CRUD routes registered successfully")
+  // Setup routes
+  routes.SetupRoutes(router)
 
   // Start the server
   port := os.Getenv("PORT")
@@ -67,7 +32,7 @@ func main() {
   }
 
   log.Printf("🚀 Server running on port %s", port)
-  if err := r.Run(":" + port); err != nil {
-    log.Fatalf("❌ Failed to start the server: %v", err)
+  if err := router.Run(":" + port); err != nil {
+    log.Fatalf("❌ Server failed: %v", err)
   }
 }

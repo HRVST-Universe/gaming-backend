@@ -5,11 +5,19 @@ import (
   "rewarding-harvest-backend/controllers"
 )
 
-// SetupRoutes - Register Routes
 func SetupRoutes(router *gin.Engine) {
   api := router.Group("/api")
   {
-    api.GET("/health", controllers.HealthCheck)
-    api.POST("/auth/register", controllers.RegisterUser)
+    // User Routes
+    api.POST("/users/register", controllers.RegisterUser)
+    api.POST("/auth/login", controllers.LoginUser)
+
+    // Player Actions Routes
+    api.POST("/player-actions", controllers.LogPlayerAction)
+
+    // Health Check Route
+    api.GET("/health", func(c *gin.Context) {
+      c.JSON(200, gin.H{"status": "Server is running"})
+    })
   }
 }

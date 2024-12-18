@@ -47,21 +47,19 @@ func RegisterUser(c *gin.Context) {
   c.JSON(http.StatusCreated, gin.H{"message": "User registered successfully", "user": user})
 }
 
-// Login User (POST /api/users/login)
+// Login User (GET /api/users/login)
 func LoginUser(c *gin.Context) {
-  var payload struct {
-    Email string `json:"email" binding:"required,email"`
-  }
+  email := c.Query("email")
 
-  // Validate input payload
-  if err := c.ShouldBindJSON(&payload); err != nil {
+  // Validate email parameter
+  if email == "" {
     c.JSON(http.StatusBadRequest, gin.H{"error": "Email is required"})
     return
   }
 
   // Look up user by email
   var user models.User
-  if err := config.DB.Where("email = ?", payload.Email).First(&user).Error; err != nil {
+  if err := config.DB.Where("email = ?", email).First(&user).Error; err != nil {
     c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
     return
   }
@@ -99,7 +97,7 @@ func GetAllUsers(c *gin.Context) {
     return
   }
 
-  // Return the user list
+  // Return user list
   c.JSON(http.StatusOK, gin.H{"users": users})
 }
 

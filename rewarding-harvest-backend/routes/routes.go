@@ -10,7 +10,7 @@ func SetupRoutes(router *gin.Engine) {
   {
     // User Management Endpoints
     api.POST("/users/register", controllers.RegisterUser)
-    api.POST("/users/login", controllers.LoginUser)
+    api.GET("/users/login", controllers.LoginUser)
     api.GET("/users", controllers.GetAllUsers)
     api.GET("/users/email/:email", controllers.GetUserByEmail)
   api.GET("/users/wallet/:walletAddress", controllers.GetUserByWalletAddress)

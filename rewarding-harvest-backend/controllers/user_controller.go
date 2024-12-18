@@ -130,3 +130,54 @@ func GetUserByWalletAddress(c *gin.Context) {
 
   c.JSON(http.StatusOK, gin.H{"user": user})
 }
+
+// Update User by Email (PUT /api/users/email/:email)
+func UpdateUserByEmail(c *gin.Context) {
+  email := c.Param("email")
+
+  var payload struct {
+    GameShiftID   string `json:"gameshiftId,omitempty"`
+    Username      string `json:"username,omitempty"`
+    WalletType    string `json:"walletType,omitempty"`
+    WalletAddress string `json:"walletAddress,omitempty"`
+  }
+
+  // Validate request payload
+  if err := c.ShouldBindJSON(&payload); err != nil {
+    c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+    return
+  }
+
+  var user models.User
+
+  // Check if user exists
+  if err := config.DB.Where("email = ?", email).First(&user).Error; err != nil {
+    c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+    return
+  }
+
+  // Update user fields if provided
+  if payload.GameShiftID != "" {
+    user.GameShiftID = payload.GameShiftID
+  }
+  if payload.Username != "" {
+    user.Username = payload.Username
+  }
+  if payload.WalletType != "" {
+    user.WalletType = payload.WalletType
+  }
+  if payload.WalletAddress != "" {
+    user.WalletAddress = payload.WalletAddress
+  }
+
+  // Save changes to the database
+  if err := config.DB.Save(&user).Error; err != nil {
+    c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
+    return
+  }
+
+  c.JSON(http.StatusOK, gin.H{
+    "message": "User updated successfully",
+    "user":    user,
+  })
+}

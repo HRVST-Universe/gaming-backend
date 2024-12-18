@@ -32,11 +32,11 @@ func LogPlayerAction(c *gin.Context) {
 
 // Get Player Actions by Player ID (GET /api/player-actions/id/:playerId)
 func GetPlayerActionsByID(c *gin.Context) {
-  playerId := c.Param("playerId")
+  playerID := c.Param("playerId")
 
   var actions []models.PlayerAction
-  if err := config.DB.Where("player_id = ?", playerId).Find(&actions).Error; err != nil {
-    log.Printf("❌ Actions for player ID %s not found: %v", playerId, err)
+  if err := config.DB.Where("player_id = ?", playerID).Find(&actions).Error; err != nil {
+    log.Printf("❌ Actions for player ID %s not found: %v", playerID, err)
     c.JSON(http.StatusNotFound, gin.H{"error": "Actions not found"})
     return
   }

@@ -22,7 +22,6 @@ func RegisterUser(c *gin.Context) {
     WalletAddress string `json:"walletAddress" binding:"required"`
   }
 
-  // Validate input
   if err := c.ShouldBindJSON(&payload); err != nil {
     log.Printf("❌ Invalid registration payload: %v", err)
     c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input, all fields are required"})
@@ -37,7 +36,6 @@ func RegisterUser(c *gin.Context) {
     WalletAddress: payload.WalletAddress,
   }
 
-  // Save to database
   if err := config.DB.Create(&user).Error; err != nil {
     log.Printf("❌ Registration failed: %v", err)
     c.JSON(http.StatusInternalServerError, gin.H{"error": "Registration failed"})
@@ -135,7 +133,6 @@ func UpdateUserByEmail(c *gin.Context) {
     WalletAddress string `json:"walletAddress"`
   }
 
-  // Validate request payload
   if err := c.ShouldBindJSON(&payload); err != nil {
     log.Printf("❌ Invalid input for email %s: %v", email, err)
     c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
@@ -151,22 +148,14 @@ func UpdateUserByEmail(c *gin.Context) {
     return
   }
 
-  // Update fields
-  updatedFields := make(map[string]interface{})
-  if payload.GameShiftID != "" {
-    updatedFields["gameshiftId"] = payload.GameShiftID
-  }
-  if payload.Username != "" {
-    updatedFields["username"] = payload.Username
-  }
-  if payload.WalletType != "" {
-    updatedFields["walletType"] = payload.WalletType
-  }
-  if payload.WalletAddress != "" {
-    updatedFields["walletAddress"] = payload.WalletAddress
+  // Update fields with PostgreSQL column names
+  updatedFields := map[string]interface{}{
+    "gameshift_id":   payload.GameShiftID,
+    "username":       payload.Username,
+    "wallet_type":    payload.WalletType,
+    "wallet_address": payload.WalletAddress,
   }
 
-  // Save changes
   if err := config.DB.Model(&user).Updates(updatedFields).Error; err != nil {
     log.Printf("❌ Failed to update user: %v", err)
     c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})

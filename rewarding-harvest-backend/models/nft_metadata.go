@@ -3,13 +3,13 @@ package models
 import "time"
 
 type NFTMetadata struct {
-  ID           uint      `json:"id" gorm:"primaryKey"`
-  UserID       uint      `json:"userId" gorm:"notNull"`
-  Ownership    string    `json:"ownership" gorm:"size:100"`
-  NFTID        string    `json:"nftId" gorm:"size:255;unique"`
-  Squad        string    `json:"squad" gorm:"size:100"`
-  XP           int       `json:"xp" gorm:"default:0"`
-  Level        int       `json:"level" gorm:"default:1"`
-  MetadataURI  string    `json:"metadataUri" gorm:"type:text"`
-  UpdatedAt    time.Time `json:"updatedAt" gorm:"autoUpdateTime"`
+  ID           uint      `gorm:"primaryKey;column:id" json:"id"`
+  UserID       uint      `gorm:"column:user_id;notNull" json:"userId"`
+  Ownership    string    `gorm:"column:ownership;size:100" json:"ownership"`
+  NFTID        string    `gorm:"column:nft_id;size:255;unique" json:"nftId"`
+  Squad        string    `gorm:"column:squad;size:100" json:"squad"`
+  XP           int       `gorm:"column:xp;default:0" json:"xp"`
+  Level        int       `gorm:"column:level;default:1" json:"level"`
+  MetadataURI  string    `gorm:"column:metadata_uri;type:text" json:"metadataUri"`
+  UpdatedAt    time.Time `gorm:"column:updated_at;autoUpdateTime" json:"updatedAt"`
 }

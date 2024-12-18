@@ -1,0 +1,9 @@
+Database connection established with SSL
+[GIN] 2024/12/18 - 14:34:45 | 200 |       57.94µs |   172.58.113.24 | GET      "/"
+
+2024/12/18 14:34:56 [32m/home/runner/Digital-Ocean/gaming-backend/rewarding-harvest-backend/controllers/user_controller.go:148 [33mSLOW SQL >= 200ms
+[0m[31;1m[218.110ms] [33m[rows:1][35m SELECT * FROM "users" WHERE email = 'akilah.jackson@gmail.com' ORDER BY "users"."id" LIMIT 1[0m
+
+2024/12/18 14:34:56 [31;1m/home/runner/Digital-Ocean/gaming-backend/rewarding-harvest-backend/controllers/user_controller.go:170 [35;1mERROR: column "gameshiftId" of relation "users" does not exist (SQLSTATE 42703)
+[0m[33m[217.399ms] [34;1m[rows:0][0m UPDATE "users" SET "gameshiftId"='user_9881f81cd6114db3b23f2912d2e6dd',"username"='akilah-test',"walletAddress"='CpDZehtX1wDyLVjtEB59EEU9LZrDG3JX46pvz91eFPnh',"walletType"='GameShift' WHERE "id" = 2
+[GIN] 2024/12/18 - 14:34:56 | 500 |  436.150108ms |    34.139.239.2 | PUT      "/api/users/email/akilah.jackson@gmail.com"

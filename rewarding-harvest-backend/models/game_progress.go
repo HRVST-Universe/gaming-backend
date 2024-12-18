@@ -3,11 +3,11 @@ package models
 import "time"
 
 type GameProgress struct {
-  ID             uint      `json:"id" gorm:"primaryKey"`
-  UserID         uint      `json:"userId" gorm:"notNull"`
-  XP             int       `json:"xp" gorm:"default:0"`
-  Level          int       `json:"level" gorm:"default:1"`
-  CompletedTasks int       `json:"completedTasks" gorm:"default:0"`
-  Badges         string    `json:"badges" gorm:"type:jsonb;default:'[]'"`
-  LastActive     time.Time `json:"lastActive" gorm:"autoUpdateTime"`
+  ID             uint      `gorm:"primaryKey;column:id" json:"id"`
+  UserID         uint      `gorm:"column:user_id;notNull" json:"userId"`
+  XP             int       `gorm:"column:xp;default:0" json:"xp"`
+  Level          int       `gorm:"column:level;default:1" json:"level"`
+  CompletedTasks int       `gorm:"column:completed_tasks;default:0" json:"completedTasks"`
+  Badges         string    `gorm:"column:badges;type:jsonb;default:'[]'" json:"badges"`
+  LastActive     time.Time `gorm:"column:last_active;autoUpdateTime" json:"lastActive"`
 }

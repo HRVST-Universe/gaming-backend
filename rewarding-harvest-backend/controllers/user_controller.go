@@ -22,13 +22,13 @@ func RegisterUser(c *gin.Context) {
     WalletAddress string `json:"walletAddress" binding:"required"`
   }
 
-  // Validate request payload
+  // Validate input
   if err := c.ShouldBindJSON(&payload); err != nil {
+    log.Printf("❌ Invalid registration payload: %v", err)
     c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input, all fields are required"})
     return
   }
 
-  // Create new user object
   user := models.User{
     GameShiftID:   payload.GameShiftID,
     Email:         payload.Email,
@@ -37,7 +37,7 @@ func RegisterUser(c *gin.Context) {
     WalletAddress: payload.WalletAddress,
   }
 
-  // Save user to database
+  // Save to database
   if err := config.DB.Create(&user).Error; err != nil {
     log.Printf("❌ Registration failed: %v", err)
     c.JSON(http.StatusInternalServerError, gin.H{"error": "Registration failed"})
@@ -51,15 +51,14 @@ func RegisterUser(c *gin.Context) {
 func LoginUser(c *gin.Context) {
   email := c.Query("email")
 
-  // Validate email parameter
   if email == "" {
     c.JSON(http.StatusBadRequest, gin.H{"error": "Email is required"})
     return
   }
 
-  // Look up user by email
   var user models.User
   if err := config.DB.Where("email = ?", email).First(&user).Error; err != nil {
+    log.Printf("❌ Login failed, user not found: %s", email)
     c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
     return
   }
@@ -71,7 +70,6 @@ func LoginUser(c *gin.Context) {
     "exp":   time.Now().Add(24 * time.Hour).Unix(),
   })
 
-  // Sign the token
   tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
   if err != nil {
     log.Printf("❌ Token generation failed: %v", err)
@@ -79,7 +77,6 @@ func LoginUser(c *gin.Context) {
     return
   }
 
-  // Return the user and token
   c.JSON(http.StatusOK, gin.H{
     "user":  user,
     "token": tokenString,
@@ -90,14 +87,12 @@ func LoginUser(c *gin.Context) {
 func GetAllUsers(c *gin.Context) {
   var users []models.User
 
-  // Retrieve all users from the database
   if err := config.DB.Find(&users).Error; err != nil {
     log.Printf("❌ Failed to retrieve users: %v", err)
     c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve users"})
     return
   }
 
-  // Return user list
   c.JSON(http.StatusOK, gin.H{"users": users})
 }
 
@@ -134,14 +129,15 @@ func UpdateUserByEmail(c *gin.Context) {
   email := c.Param("email")
 
   var payload struct {
-    GameShiftID   string `json:"gameshiftId,omitempty"`
-    Username      string `json:"username,omitempty"`
-    WalletType    string `json:"walletType,omitempty"`
-    WalletAddress string `json:"walletAddress,omitempty"`
+    GameShiftID   string `json:"gameshiftId"`
+    Username      string `json:"username"`
+    WalletType    string `json:"walletType"`
+    WalletAddress string `json:"walletAddress"`
   }
 
   // Validate request payload
   if err := c.ShouldBindJSON(&payload); err != nil {
+    log.Printf("❌ Invalid input for email %s: %v", email, err)
     c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
     return
   }
@@ -150,32 +146,32 @@ func UpdateUserByEmail(c *gin.Context) {
 
   // Check if user exists
   if err := config.DB.Where("email = ?", email).First(&user).Error; err != nil {
+    log.Printf("❌ User with email %s not found: %v", email, err)
     c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
     return
   }
 
-  // Update user fields if provided
+  // Update fields
+  updatedFields := make(map[string]interface{})
   if payload.GameShiftID != "" {
-    user.GameShiftID = payload.GameShiftID
+    updatedFields["gameshiftId"] = payload.GameShiftID
   }
   if payload.Username != "" {
-    user.Username = payload.Username
+    updatedFields["username"] = payload.Username
   }
   if payload.WalletType != "" {
-    user.WalletType = payload.WalletType
+    updatedFields["walletType"] = payload.WalletType
   }
   if payload.WalletAddress != "" {
-    user.WalletAddress = payload.WalletAddress
+    updatedFields["walletAddress"] = payload.WalletAddress
   }
 
-  // Save changes to the database
-  if err := config.DB.Save(&user).Error; err != nil {
+  // Save changes
+  if err := config.DB.Model(&user).Updates(updatedFields).Error; err != nil {
+    log.Printf("❌ Failed to update user: %v", err)
     c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
     return
   }
 
-  c.JSON(http.StatusOK, gin.H{
-    "message": "User updated successfully",
-    "user":    user,
-  })
+  c.JSON(http.StatusOK, gin.H{"message": "User updated successfully", "user": user})
 }

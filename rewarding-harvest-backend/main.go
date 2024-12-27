@@ -27,6 +27,18 @@ func main() {
   // Initialize the router
   router := gin.Default()
 
+  // Configure CORS
+  router.Use(func(c *gin.Context) {
+    c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+    c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+    c.Writer.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+    if c.Request.Method == "OPTIONS" {
+      c.AbortWithStatus(204)
+      return
+    }
+    c.Next()
+  })
+
   // Register routes
   log.Println("🛠 Registering routes...")
   routes.SetupRoutes(router)
@@ -53,7 +65,7 @@ func main() {
   }
   log.Printf("✅ Server running on port %s", port)
 
-  if err := router.Run(":" + port); err != nil {
+  if err := router.Run("0.0.0.0:" + port); err != nil {
     log.Fatalf("❌ Server startup failed: %v", err)
   }
 }

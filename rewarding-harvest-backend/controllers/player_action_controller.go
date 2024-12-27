@@ -27,7 +27,7 @@ func LogPlayerAction(c *gin.Context) {
     return
   }
 
-  c.JSON(http.StatusCreated, gin.H{"message": "Action logged successfully", "action": payload})
+  c.JSON(http.StatusCreated, gin.H{"success": true,"message": "Action logged successfully", "action": payload})
 }
 
 // Get Player Actions by Player ID (GET /api/player-actions/id/:playerId)
